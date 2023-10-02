@@ -2,45 +2,39 @@
 import { useState } from 'react'
 
 export default function Home() {
-  // TypeScript interface for timer object
-  interface timerObj {
-    session: number
-    length: number
-    break: number
+  // let date: Date = new Date()
+  const [currentSession, setCurrentSession] = useState<any>(25)
+  const [sessionLength, setSessionLength] = useState<number>(25)
+  const [sessionBreak, setSessionBreak] = useState<number>(5)
+
+  function startStop() {
+    setInterval(() => {
+      let time = new Date().toLocaleTimeString(navigator.language, {
+        minute: '2-digit',
+        second: '2-digit',
+      })
+      setCurrentSession(time)
+    }, 1000)
   }
-  const [timer, setTimer] = useState<timerObj>({ session: 25, length: 25, break: 5 })
 
   function reset() {
-    setTimer((timer) => ({
-      ...timer,
-      session: 25,
-      length: 25,
-      break: 5,
-    }))
+    setCurrentSession(25)
+    setSessionLength(25)
+    setSessionBreak(5)
   }
+
+  // Increment/Decrement Length & Break
   function incrementLength() {
-    setTimer((timer) => ({
-      ...timer,
-      length: timer.length + 1,
-    }))
+    setSessionLength(sessionLength + 1)
   }
   function decrementLength() {
-    setTimer((timer) => ({
-      ...timer,
-      length: timer.length - 1,
-    }))
+    setSessionLength(sessionLength - 1)
   }
   function incrementBreak() {
-    setTimer((timer) => ({
-      ...timer,
-      break: timer.break + 1,
-    }))
+    setSessionBreak(sessionBreak + 1)
   }
   function decrementBreak() {
-    setTimer((timer) => ({
-      ...timer,
-      break: timer.break - 1,
-    }))
+    setSessionBreak(sessionBreak - 1)
   }
 
   return (
@@ -54,9 +48,9 @@ export default function Home() {
             Session
           </h2>
           <div id="time-left" className="p-1">
-            {timer.session}
+            {currentSession}
           </div>
-          <button id="start_stop" className="py-1 px-4 text-2xl">
+          <button id="start_stop" className="py-1 px-4 text-2xl" onClick={startStop}>
             ⏯
           </button>
           <button id="reset" className="py-1 px-4 text-2xl" onClick={reset}>
@@ -70,7 +64,7 @@ export default function Home() {
             Session Length
           </h2>
           <div id="session-length" className="p-1">
-            {timer.length}
+            {sessionLength}
           </div>
           <button id="session-decrement" className="py-1 px-4 text-xl" onClick={decrementLength}>
             ▼
@@ -86,7 +80,7 @@ export default function Home() {
             Break Length
           </h2>
           <div id="break-length" className="p-1">
-            {timer.break}
+            {sessionBreak}
           </div>
           <button id="break-decrement" className="py-1 px-4 text-xl" onClick={decrementBreak}>
             ▼
