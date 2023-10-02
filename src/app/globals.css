@@ -21,3 +21,10 @@ body {
   background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb)))
     rgb(var(--background-start-rgb));
 }
+
+button:hover {
+  @apply bg-slate-600 rounded-2xl;
+}
+button:active {
+  @apply bg-slate-600 brightness-150 rounded-2xl;
+}

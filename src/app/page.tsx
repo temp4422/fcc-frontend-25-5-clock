@@ -1,8 +1,47 @@
-"use client";
-import { useState } from "react";
+'use client'
+import { useState } from 'react'
 
 export default function Home() {
-  const [timer, setTimer] = useState({ session: 25, length: 25, break: 5 });
+  // TypeScript interface for timer object
+  interface timerObj {
+    session: number
+    length: number
+    break: number
+  }
+  const [timer, setTimer] = useState<timerObj>({ session: 25, length: 25, break: 5 })
+
+  function reset() {
+    setTimer((timer) => ({
+      ...timer,
+      session: 25,
+      length: 25,
+      break: 5,
+    }))
+  }
+  function incrementLength() {
+    setTimer((timer) => ({
+      ...timer,
+      length: timer.length + 1,
+    }))
+  }
+  function decrementLength() {
+    setTimer((timer) => ({
+      ...timer,
+      length: timer.length - 1,
+    }))
+  }
+  function incrementBreak() {
+    setTimer((timer) => ({
+      ...timer,
+      break: timer.break + 1,
+    }))
+  }
+  function decrementBreak() {
+    setTimer((timer) => ({
+      ...timer,
+      break: timer.break - 1,
+    }))
+  }
 
   return (
     <div className="h-screen grid grid-rows-[auto_1fr_auto] text-center">
@@ -20,7 +59,7 @@ export default function Home() {
           <button id="start_stop" className="py-1 px-4 text-2xl">
             ⏯
           </button>
-          <button id="reset" className="py-1 px-4 text-2xl">
+          <button id="reset" className="py-1 px-4 text-2xl" onClick={reset}>
             ↺
           </button>
         </div>
@@ -33,10 +72,10 @@ export default function Home() {
           <div id="session-length" className="p-1">
             {timer.length}
           </div>
-          <button id="session-decrement" className="py-1 px-4 text-xl">
+          <button id="session-decrement" className="py-1 px-4 text-xl" onClick={decrementLength}>
             ▼
           </button>
-          <button id="session-increment" className="py-1 px-4 text-xl">
+          <button id="session-increment" className="py-1 px-4 text-xl" onClick={incrementLength}>
             ▲
           </button>
         </div>
@@ -49,10 +88,10 @@ export default function Home() {
           <div id="break-length" className="p-1">
             {timer.break}
           </div>
-          <button id="break-decrement" className="py-1 px-4 text-xl">
+          <button id="break-decrement" className="py-1 px-4 text-xl" onClick={decrementBreak}>
             ▼
           </button>
-          <button id="break-increment" className="py-1 px-4 text-xl">
+          <button id="break-increment" className="py-1 px-4 text-xl" onClick={incrementBreak}>
             ▲
           </button>
         </div>
@@ -64,5 +103,5 @@ export default function Home() {
 
       <script defer src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
     </div>
-  );
+  )
 }
