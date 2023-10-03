@@ -1,23 +1,34 @@
 'use client'
 import { useState } from 'react'
+import { clearInterval } from 'timers'
 
 export default function Home() {
   // let date: Date = new Date()
   const [currentSession, setCurrentSession] = useState<any>(25)
   const [sessionLength, setSessionLength] = useState<number>(25)
   const [sessionBreak, setSessionBreak] = useState<number>(5)
+  const [intervalID, setintervalID] = useState<ReturnType<typeof setInterval>>() // Make id global
 
-  function startStop() {
-    setInterval(() => {
-      let time = new Date().toLocaleTimeString(navigator.language, {
+  // setTimer function
+  function setTimer() {
+    let timeMs = currentSession * 60 * 1000 // Convert min to ms = min * sec * ms
+    const tmpIntervalID = setInterval(() => {
+      timeMs -= 1000 // Subtract 1 second on each interval execution
+      let timeMinSec = new Date(timeMs).toLocaleTimeString([], {
         minute: '2-digit',
         second: '2-digit',
-      })
-      setCurrentSession(time)
-    }, 1000)
+      }) // Convert ms to min:sec
+      setCurrentSession(timeMinSec) // Display time every 1000 ms
+    }, 1000) // Count down each 1000 ms
+    setintervalID(tmpIntervalID) // Set intervalID for future use of clearInterval()
+  }
+
+  function startStop() {
+    setTimer()
   }
 
   function reset() {
+    window.clearInterval(intervalID) // Remove interval from window object
     setCurrentSession(25)
     setSessionLength(25)
     setSessionBreak(5)
