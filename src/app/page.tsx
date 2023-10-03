@@ -1,24 +1,23 @@
 'use client'
 import { useState } from 'react'
-import { clearInterval } from 'timers'
 
 export default function Home() {
   // let date: Date = new Date()
-  const [currentSession, setCurrentSession] = useState<any>(25)
+  // const [currentSession, setCurrentSession] = useState<any>(25)
   const [sessionLength, setSessionLength] = useState<number>(25)
   const [sessionBreak, setSessionBreak] = useState<number>(5)
   const [intervalID, setintervalID] = useState<ReturnType<typeof setInterval>>() // Make id global
 
   // setTimer function
   function setTimer() {
-    let timeMs = currentSession * 60 * 1000 // Convert min to ms = min * sec * ms
+    let timeMs = sessionLength * 60 * 1000 // Convert min to ms = min * sec * ms
     const tmpIntervalID = setInterval(() => {
       timeMs -= 1000 // Subtract 1 second on each interval execution
-      let timeMinSec = new Date(timeMs).toLocaleTimeString([], {
+      let timeMinSec: any = new Date(timeMs).toLocaleTimeString([], {
         minute: '2-digit',
         second: '2-digit',
       }) // Convert ms to min:sec
-      setCurrentSession(timeMinSec) // Display time every 1000 ms
+      setSessionLength(timeMinSec) // Display time every 1000 ms
     }, 1000) // Count down each 1000 ms
     setintervalID(tmpIntervalID) // Set intervalID for future use of clearInterval()
   }
@@ -29,7 +28,7 @@ export default function Home() {
 
   function reset() {
     window.clearInterval(intervalID) // Remove interval from window object
-    setCurrentSession(25)
+    setSessionLength(25)
     setSessionLength(25)
     setSessionBreak(5)
   }
@@ -59,7 +58,7 @@ export default function Home() {
             Session
           </h2>
           <div id="time-left" className="p-1">
-            {currentSession}
+            {sessionLength}
           </div>
           <button id="start_stop" className="py-1 px-4 text-2xl" onClick={startStop}>
             ⏯
