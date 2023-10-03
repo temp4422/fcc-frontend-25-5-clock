@@ -73,8 +73,10 @@ export default function Home() {
             Session
           </h2>
           <div id="time-left" className="p-1">
-            {/* Convert timestamp to MM:SS on each state change */}
-            {new Date(currentSession).toTimeString().slice(3, 9)}
+            {/* Convert timestamp to MM:SS on each state change. Special handle for 60:00 */}
+            {sessionLength == 60 && currentSession == 60 * 60 * 1000
+              ? '60:00'
+              : new Date(currentSession).toTimeString().slice(3, 9)}
           </div>
           <button id="start_stop" className="py-1 px-4 text-2xl" onClick={startStop}>
             ⏯
