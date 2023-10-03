@@ -2,19 +2,34 @@
 import { useState, useEffect, useRef } from 'react'
 
 export default function Home() {
-  const [currentSession, setCurrentSession] = useState<number>(25 * 60 * 1000)
-  const [sessionLength, setSessionLength] = useState<number>(25)
-  const [sessionBreak, setSessionBreak] = useState<number>(5)
+  const [time, setTime] = useState<number>(1 * 60 * 1000)
+  const [sessionLength, setSessionLength] = useState<number>(1)
+  const [breakLength, setBreakLength] = useState<number>(1)
   const [intervalID, setintervalID] = useState<ReturnType<typeof setInterval>>() // Set interval ID
   const [isTicking, setIsTicking] = useState<boolean>(false)
+  const [display, setDisplay] = useState<string>('SESSION')
 
   // setTimer function
   function setTimer() {
-    let timestamp = currentSession
+    let timestamp = time
+    // let timestamp: number
+
+    // if (display == 'SESSION') {
+    //   timestamp = time
+    // } else if (display == 'BREAK') {
+    //   setTime(breakLength)
+    //   timestamp = time
+    // }
+
     const tmpIntervalID = setInterval(() => {
       timestamp -= 1000 // Subtract 1 second on each interval execution
-      setCurrentSession(timestamp) // Display time every 1000 ms
-    }, 1000) // Count down each 1000 ms
+      // // Break functionality
+      // if (timestamp == 0) {
+      //   timestamp = breakLength
+      //   setDisplay('BREAK')
+      // }
+      setTime(timestamp) // Display time every 1000 ms
+    }, 100) // Count down each 1000 ms
     setintervalID(tmpIntervalID) // Set intervalID for future use of clearInterval()
   }
 
@@ -33,32 +48,32 @@ export default function Home() {
   function reset() {
     setIsTicking(false)
     clearInterval(intervalID)
-    setCurrentSession(25 * 60 * 1000)
+    setTime(25 * 60 * 1000)
     setSessionLength(25)
-    setSessionBreak(5)
+    setBreakLength(5)
   }
 
   // Increment/Decrement Length & Break
   function incrementLength() {
     if (sessionLength < 60) {
       setSessionLength(sessionLength + 1)
-      setCurrentSession(currentSession + 1000 * 60)
+      setTime(time + 1000 * 60)
     }
   }
   function decrementLength() {
     if (sessionLength > 1) {
       setSessionLength(sessionLength - 1)
-      setCurrentSession(currentSession - 1000 * 60)
+      setTime(time - 1000 * 60)
     }
   }
   function incrementBreak() {
-    if (sessionBreak < 60) {
-      setSessionBreak(sessionBreak + 1)
+    if (breakLength < 60) {
+      setBreakLength(breakLength + 1)
     }
   }
   function decrementBreak() {
-    if (sessionBreak > 1) {
-      setSessionBreak(sessionBreak - 1)
+    if (breakLength > 1) {
+      setBreakLength(breakLength - 1)
     }
   }
 
@@ -70,13 +85,13 @@ export default function Home() {
       <main className="flex flex-col items-center">
         <div className="w-56 h-auto bg-slate-500 rounded-md p-2 m-1">
           <h2 id="timer-label" className="text-xl p-2">
-            Session
+            {display}
           </h2>
           <div id="time-left" className="p-1">
             {/* Convert timestamp to MM:SS on each state change. Special handle for 60:00 */}
-            {sessionLength == 60 && currentSession == 60 * 60 * 1000
+            {sessionLength == 60 && time == 60 * 60 * 1000
               ? '60:00'
-              : new Date(currentSession).toTimeString().slice(3, 9)}
+              : new Date(time).toTimeString().slice(3, 9)}
           </div>
           <button id="start_stop" className="py-1 px-4 text-2xl" onClick={startStop}>
             ⏯
@@ -108,7 +123,7 @@ export default function Home() {
             Break Length
           </h2>
           <div id="break-length" className="p-1">
-            {sessionBreak}
+            {breakLength}
           </div>
           <button id="break-decrement" className="py-1 px-4 text-xl" onClick={decrementBreak}>
             ▼
