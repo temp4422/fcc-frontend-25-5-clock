@@ -2,10 +2,10 @@
 import { useState, useEffect, useRef } from 'react'
 
 export default function Home() {
-  const [currentSession, setCurrentSession] = useState<any>(25)
+  const [currentSession, setCurrentSession] = useState<string>('25:00')
   const [sessionLength, setSessionLength] = useState<number>(25)
   const [sessionBreak, setSessionBreak] = useState<number>(5)
-  const [intervalID, setintervalID] = useState<ReturnType<typeof setInterval>>() // Make id global
+  const [intervalID, setintervalID] = useState<ReturnType<typeof setInterval>>() // Set interval ID
   const [isTicking, setIsTicking] = useState<boolean>(false)
 
   // setTimer function
@@ -41,26 +41,34 @@ export default function Home() {
 
   function reset() {
     setIsTicking(false)
-    clearInterval(intervalID) // Remove interval from window object
-    setCurrentSession(25)
+    clearInterval(intervalID)
+    setCurrentSession('25:00')
     setSessionLength(25)
     setSessionBreak(5)
   }
 
   // Increment/Decrement Length & Break
   function incrementLength() {
-    setSessionLength(sessionLength + 1)
-    setCurrentSession(currentSession + 1)
+    if (sessionLength < 60) {
+      setSessionLength(sessionLength + 1)
+      setCurrentSession(currentSession + 1)
+    }
   }
   function decrementLength() {
-    setSessionLength(sessionLength - 1)
-    setCurrentSession(currentSession - 1)
+    if (sessionLength > 1) {
+      setSessionLength(sessionLength - 1)
+      setCurrentSession(currentSession - 1)
+    }
   }
   function incrementBreak() {
-    setSessionBreak(sessionBreak + 1)
+    if (sessionBreak < 60) {
+      setSessionBreak(sessionBreak + 1)
+    }
   }
   function decrementBreak() {
-    setSessionBreak(sessionBreak - 1)
+    if (sessionBreak > 1) {
+      setSessionBreak(sessionBreak - 1)
+    }
   }
 
   return (
