@@ -10,23 +10,30 @@ export default function Home() {
 
   // setTimer function
   function setTimer() {
-    let timeMs = sessionLength * 60 * 1000 // Convert min to ms = min * sec * ms
+    let dateString // Convert currentSession value to string and filter
+    if (currentSession.toString().length >= 3) {
+      dateString = `1970-01-01T00:${currentSession.trim()}.000Z`
+    } else if (currentSession.toString().length == 2) {
+      dateString = `1970-01-01T00:${currentSession}:00.000Z`
+    } else if (currentSession.toString().length == 1) {
+      dateString = `1970-01-01T00:0${currentSession}:00.000Z`
+    }
+    let timestamp = new Date(dateString as string).getTime() // Get timestamp 1500000
     const tmpIntervalID = setInterval(() => {
-      timeMs -= 1000 // Subtract 1 second on each interval execution
-      let timeMinSec = new Date(timeMs).toLocaleTimeString([], {
-        minute: '2-digit',
-        second: '2-digit',
-      }) // Convert ms to min:sec
-      setCurrentSession(timeMinSec) // Display time every 1000 ms
+      timestamp -= 1000 // Subtract 1 second on each interval execution
+      let timeMinSec = new Date(timestamp).toTimeString().slice(3, 9) // Convert ms to min:sec
+      setCurrentSession(timeMinSec) // Set 24:59 and display time every 1000 ms
     }, 1000) // Count down each 1000 ms
     setintervalID(tmpIntervalID) // Set intervalID for future use of clearInterval()
   }
 
   function startStop() {
     if (isTicking) {
+      // STOP
       setIsTicking(false)
       clearInterval(intervalID)
     } else {
+      // START
       setIsTicking(true)
       setTimer()
     }
