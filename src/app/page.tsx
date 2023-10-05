@@ -9,6 +9,23 @@ export default function Home() {
   const [isTicking, setIsTicking] = useState<boolean>(false)
   const [display, setDisplay] = useState<string>('SESSION')
 
+  // Play/Stop audio
+  const audioURL = [
+    {
+      src: 'https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav',
+    },
+  ]
+  const audioHTML = audioURL.map((item) => <audio key={'beep'} id="beep" src={item.src}></audio>)
+  function playAudio() {
+    const audioElement = document.querySelector('#beep') as HTMLAudioElement
+    audioElement.play().catch((e) => console.log(e))
+  }
+  function stopAudio() {
+    const audioElement = document.querySelector('#beep') as HTMLAudioElement
+    audioElement.pause()
+    audioElement.load()
+  }
+
   // setTimer function
   function setTimer() {
     let timestamp = time
@@ -20,11 +37,13 @@ export default function Home() {
       if (timestamp == 0 && display == 'SESSION') {
         clearInterval(tmpIntervalID)
         setTime(breakLength * 60 * 1000)
+        playAudio()
         setDisplay('BREAK')
       }
       if (timestamp == 0 && display == 'BREAK') {
         clearInterval(tmpIntervalID)
         setTime(sessionLength * 60 * 1000)
+        playAudio()
         setDisplay('SESSION')
       }
     }, 1000) // Countdown each 1 sec
@@ -56,6 +75,7 @@ export default function Home() {
     setTime(25 * 60 * 1000)
     setSessionLength(25)
     setBreakLength(5)
+    stopAudio()
     setDisplay('SESSION')
   }
 
@@ -143,6 +163,8 @@ export default function Home() {
       <footer className="text-sm m-4">
         Made by <a href="https://github.com/webdev4422">webdev4422</a>
       </footer>
+
+      {audioHTML}
 
       <script defer src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
     </div>
