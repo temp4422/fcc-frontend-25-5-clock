@@ -2,36 +2,41 @@
 import { useState, useEffect, useRef } from 'react'
 
 export default function Home() {
-  const [time, setTime] = useState<number>(1 * 60 * 1000)
-  const [sessionLength, setSessionLength] = useState<number>(1)
-  const [breakLength, setBreakLength] = useState<number>(1)
-  const [intervalID, setintervalID] = useState<ReturnType<typeof setInterval>>() // Set interval ID
+  const [time, setTime] = useState<number>(25 * 60 * 1000) // Timestamp
+  const [sessionLength, setSessionLength] = useState<number>(25)
+  const [breakLength, setBreakLength] = useState<number>(5)
+  const [intervalID, setIntervalID] = useState<ReturnType<typeof setInterval>>() // Set interval ID
   const [isTicking, setIsTicking] = useState<boolean>(false)
   const [display, setDisplay] = useState<string>('SESSION')
 
   // setTimer function
   function setTimer() {
     let timestamp = time
-    // let timestamp: number
-
-    // if (display == 'SESSION') {
-    //   timestamp = time
-    // } else if (display == 'BREAK') {
-    //   setTime(breakLength)
-    //   timestamp = time
-    // }
 
     const tmpIntervalID = setInterval(() => {
-      timestamp -= 1000 // Subtract 1 second on each interval execution
-      // // Break functionality
-      // if (timestamp == 0) {
-      //   timestamp = breakLength
-      //   setDisplay('BREAK')
-      // }
-      setTime(timestamp) // Display time every 1000 ms
-    }, 100) // Count down each 1000 ms
-    setintervalID(tmpIntervalID) // Set intervalID for future use of clearInterval()
+      timestamp -= 1000 // Subtract 1 sec on each interval execution
+      setTime(timestamp) // Display time every 1 sec
+
+      if (timestamp == 0 && display == 'SESSION') {
+        clearInterval(tmpIntervalID)
+        setTime(breakLength * 60 * 1000)
+        setDisplay('BREAK')
+      }
+      if (timestamp == 0 && display == 'BREAK') {
+        clearInterval(tmpIntervalID)
+        setTime(sessionLength * 60 * 1000)
+        setDisplay('SESSION')
+      }
+    }, 1000) // Countdown each 1 sec
+    setIntervalID(tmpIntervalID) // Set intervalID for future use of clearInterval()
   }
+
+  useEffect(() => {
+    // Repeat timer execution on display value change, e.g. SESSION and BREAK
+    if (display && isTicking) {
+      setTimer()
+    }
+  }, [display])
 
   function startStop() {
     if (isTicking) {
@@ -51,6 +56,7 @@ export default function Home() {
     setTime(25 * 60 * 1000)
     setSessionLength(25)
     setBreakLength(5)
+    setDisplay('SESSION')
   }
 
   // Increment/Decrement Length & Break
