@@ -61,24 +61,24 @@ export default function Home() {
 
   // Increment/Decrement Length & Break
   function incrementLength() {
-    if (sessionLength < 60) {
+    if (sessionLength < 60 && !isTicking) {
       setSessionLength(sessionLength + 1)
       setTime(time + 1000 * 60)
     }
   }
   function decrementLength() {
-    if (sessionLength > 1) {
+    if (sessionLength > 1 && !isTicking) {
       setSessionLength(sessionLength - 1)
       setTime(time - 1000 * 60)
     }
   }
   function incrementBreak() {
-    if (breakLength < 60) {
+    if (breakLength < 60 && !isTicking) {
       setBreakLength(breakLength + 1)
     }
   }
   function decrementBreak() {
-    if (breakLength > 1) {
+    if (breakLength > 1 && !isTicking) {
       setBreakLength(breakLength - 1)
     }
   }
