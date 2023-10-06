@@ -9,13 +9,13 @@ export default function Home() {
   const [isTicking, setIsTicking] = useState<boolean>(false)
   const [timerLabel, setTimerLabel] = useState<string>('SESSION')
 
-  // Play/Stop audio
-  const audioURL = [
-    {
-      src: 'https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav',
-    },
-  ]
-  const audioHTML = audioURL.map((item) => <audio key={'beep'} id="beep" src={item.src}></audio>)
+  // Play/Stop audio. Must fetch audio before rendering, so audio is ready onClick event
+  const audioElement = (
+    <audio
+      id="beep"
+      src="https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav"
+    ></audio>
+  )
   function playAudio() {
     const audioElement = document.querySelector('#beep') as HTMLAudioElement
     audioElement.play().catch((e) => console.log(e))
@@ -169,7 +169,7 @@ export default function Home() {
         Made by <a href="https://github.com/webdev4422">webdev4422</a>
       </footer>
 
-      {audioHTML}
+      {audioElement}
 
       <script defer src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
     </div>
