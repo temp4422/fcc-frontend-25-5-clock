@@ -37,18 +37,18 @@ export default function Home() {
       if (timestamp == 0 && timerLabel == 'SESSION') {
         // Wrap forward execution in 1 sec delay to properly display timerLabel, because, values are changed instantly and '00:00' never shows
         setTimeout(() => {
+          setTimerLabel('BREAK')
           clearInterval(tmpIntervalID)
           setTimeLeft(breakLength * 60 * 1000)
           playAudio()
-          setTimerLabel('BREAK')
         }, 1000)
       }
       if (timestamp == 0 && timerLabel == 'BREAK') {
         setTimeout(() => {
+          setTimerLabel('SESSION')
           clearInterval(tmpIntervalID)
           setTimeLeft(sessionLength * 60 * 1000)
           playAudio()
-          setTimerLabel('SESSION')
         }, 1000)
       }
     }, 1000) // Countdown each 1 sec
