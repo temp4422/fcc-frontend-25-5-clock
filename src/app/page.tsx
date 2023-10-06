@@ -2,12 +2,12 @@
 import { useState, useEffect, useRef } from 'react'
 
 export default function Home() {
-  const [time, setTime] = useState<number>(25 * 60 * 1000) // Timestamp
+  const [timeLeft, setTimeLeft] = useState<number>(25 * 60 * 1000) // Timestamp
   const [sessionLength, setSessionLength] = useState<number>(25)
   const [breakLength, setBreakLength] = useState<number>(5)
   const [intervalID, setIntervalID] = useState<ReturnType<typeof setInterval>>() // Set interval ID
   const [isTicking, setIsTicking] = useState<boolean>(false)
-  const [display, setDisplay] = useState<string>('SESSION')
+  const [timerLabel, setTimerLabel] = useState<string>('SESSION')
 
   // Play/Stop audio
   const audioURL = [
@@ -26,25 +26,26 @@ export default function Home() {
     audioElement.load()
   }
 
+  // TODO timer never reach 00:00 in UI #time-left
   // setTimer function
   function setTimer() {
-    let timestamp = time
+    let timestamp = timeLeft
 
     const tmpIntervalID = setInterval(() => {
       timestamp -= 1000 // Subtract 1 sec on each interval execution
-      setTime(timestamp) // Display time every 1 sec
+      setTimeLeft(timestamp) // Display time every 1 sec
 
-      if (timestamp == 0 && display == 'SESSION') {
+      if (timestamp == 0 && timerLabel == 'SESSION') {
         clearInterval(tmpIntervalID)
-        setTime(breakLength * 60 * 1000)
+        setTimeLeft(breakLength * 60 * 1000)
         playAudio()
-        setDisplay('BREAK')
+        setTimerLabel('BREAK')
       }
-      if (timestamp == 0 && display == 'BREAK') {
+      if (timestamp == 0 && timerLabel == 'BREAK') {
         clearInterval(tmpIntervalID)
-        setTime(sessionLength * 60 * 1000)
+        setTimeLeft(sessionLength * 60 * 1000)
         playAudio()
-        setDisplay('SESSION')
+        setTimerLabel('SESSION')
       }
     }, 1000) // Countdown each 1 sec
     setIntervalID(tmpIntervalID) // Set intervalID for future use of clearInterval()
@@ -52,10 +53,10 @@ export default function Home() {
 
   useEffect(() => {
     // Repeat timer execution on display value change, e.g. SESSION and BREAK
-    if (display && isTicking) {
+    if (isTicking) {
       setTimer()
     }
-  }, [display])
+  }, [timerLabel])
 
   function startStop() {
     if (isTicking) {
@@ -72,24 +73,24 @@ export default function Home() {
   function reset() {
     setIsTicking(false)
     clearInterval(intervalID)
-    setTime(25 * 60 * 1000)
+    setTimeLeft(25 * 60 * 1000)
     setSessionLength(25)
     setBreakLength(5)
     stopAudio()
-    setDisplay('SESSION')
+    setTimerLabel('SESSION')
   }
 
   // Increment/Decrement Length & Break
   function incrementLength() {
     if (sessionLength < 60 && !isTicking) {
       setSessionLength(sessionLength + 1)
-      setTime(time + 1000 * 60)
+      setTimeLeft(timeLeft + 1000 * 60)
     }
   }
   function decrementLength() {
     if (sessionLength > 1 && !isTicking) {
       setSessionLength(sessionLength - 1)
-      setTime(time - 1000 * 60)
+      setTimeLeft(timeLeft - 1000 * 60)
     }
   }
   function incrementBreak() {
@@ -111,13 +112,13 @@ export default function Home() {
       <main className="flex flex-col items-center">
         <div className="w-56 h-auto bg-slate-500 rounded-md p-2 m-1">
           <h2 id="timer-label" className="text-xl p-2">
-            {display}
+            {timerLabel}
           </h2>
           <div id="time-left" className="p-1">
             {/* Convert timestamp to MM:SS on each state change. Special handle for 60:00 */}
-            {sessionLength == 60 && time == 60 * 60 * 1000
+            {sessionLength == 60 && timeLeft == 60 * 60 * 1000
               ? '60:00'
-              : new Date(time).toTimeString().slice(3, 9)}
+              : new Date(timeLeft).toTimeString().slice(3, 9)}
           </div>
           <button id="start_stop" className="py-1 px-4 text-2xl" onClick={startStop}>
             ⏯
