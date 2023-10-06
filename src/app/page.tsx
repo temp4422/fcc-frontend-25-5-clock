@@ -26,7 +26,6 @@ export default function Home() {
     audioElement.load()
   }
 
-  // TODO timer never reach 00:00 in UI #time-left
   // setTimer function
   function setTimer() {
     let timestamp = timeLeft
@@ -36,16 +35,21 @@ export default function Home() {
       setTimeLeft(timestamp) // Display time every 1 sec
 
       if (timestamp == 0 && timerLabel == 'SESSION') {
-        clearInterval(tmpIntervalID)
-        setTimeLeft(breakLength * 60 * 1000)
-        playAudio()
-        setTimerLabel('BREAK')
+        // Wrap forward execution in 1 sec delay to properly display timerLabel, because, values are changed instantly and '00:00' never shows
+        setTimeout(() => {
+          clearInterval(tmpIntervalID)
+          setTimeLeft(breakLength * 60 * 1000)
+          playAudio()
+          setTimerLabel('BREAK')
+        }, 1000)
       }
       if (timestamp == 0 && timerLabel == 'BREAK') {
-        clearInterval(tmpIntervalID)
-        setTimeLeft(sessionLength * 60 * 1000)
-        playAudio()
-        setTimerLabel('SESSION')
+        setTimeout(() => {
+          clearInterval(tmpIntervalID)
+          setTimeLeft(sessionLength * 60 * 1000)
+          playAudio()
+          setTimerLabel('SESSION')
+        }, 1000)
       }
     }, 1000) // Countdown each 1 sec
     setIntervalID(tmpIntervalID) // Set intervalID for future use of clearInterval()
