@@ -110,12 +110,12 @@ export default function Home() {
 
   return (
     <div className="h-screen grid grid-rows-[auto_1fr_auto] text-center">
-      <header className="text-3xl m-8">25 + 5 Clock</header>
+      <header className="m-8 text-3xl">25 + 5 Clock</header>
 
       {/* CURRENT SESSION */}
-      <main className="flex flex-col items-center">
-        <div className="w-56 h-auto bg-slate-500 rounded-md p-2 m-1">
-          <h2 id="timer-label" className="text-xl p-2">
+      <main className="flex flex-col items-center ">
+        <div className="w-56 h-auto p-2 m-1 rounded-md bg-slate-500">
+          <h2 id="timer-label" className="p-2 text-xl">
             {timerLabel}
           </h2>
           <div id="time-left" className="p-1">
@@ -124,48 +124,48 @@ export default function Home() {
               ? '60:00'
               : new Date(timeLeft).toTimeString().slice(3, 9)}
           </div>
-          <button id="start_stop" className="py-1 px-4 text-2xl" onClick={startStop}>
+          <button id="start_stop" className="px-4 py-1 text-2xl" onClick={startStop}>
             ⏯
           </button>
-          <button id="reset" className="py-1 px-4 text-2xl" onClick={reset}>
+          <button id="reset" className="px-4 py-1 text-2xl" onClick={reset}>
             ↺
           </button>
         </div>
 
         {/* SESSION LENGTH */}
-        <div className="w-56 h-auto bg-slate-700 rounded-md p-2 m-1">
-          <h2 id="session-label" className="text-xl p-2">
+        <div className="w-56 h-auto p-2 m-1 rounded-md bg-slate-700">
+          <h2 id="session-label" className="p-2 text-xl">
             Session Length
           </h2>
           <div id="session-length" className="p-1">
             {sessionLength}
           </div>
-          <button id="session-decrement" className="py-1 px-4 text-xl" onClick={decrementLength}>
+          <button id="session-decrement" className="px-4 py-1 text-xl" onClick={decrementLength}>
             ▼
           </button>
-          <button id="session-increment" className="py-1 px-4 text-xl" onClick={incrementLength}>
+          <button id="session-increment" className="px-4 py-1 text-xl" onClick={incrementLength}>
             ▲
           </button>
         </div>
 
         {/* SESSION BREAK */}
-        <div className="w-56 h-auto bg-slate-700 rounded-md p-2 m-1">
-          <h2 id="break-label" className="text-xl p-2">
+        <div className="w-56 h-auto p-2 m-1 rounded-md bg-slate-700">
+          <h2 id="break-label" className="p-2 text-xl">
             Break Length
           </h2>
           <div id="break-length" className="p-1">
             {breakLength}
           </div>
-          <button id="break-decrement" className="py-1 px-4 text-xl" onClick={decrementBreak}>
+          <button id="break-decrement" className="px-4 py-1 text-xl" onClick={decrementBreak}>
             ▼
           </button>
-          <button id="break-increment" className="py-1 px-4 text-xl" onClick={incrementBreak}>
+          <button id="break-increment" className="px-4 py-1 text-xl" onClick={incrementBreak}>
             ▲
           </button>
         </div>
       </main>
 
-      <footer className="text-sm m-4">
+      <footer className="m-4 text-sm">
         Made by <a href="https://github.com/webdev4422">webdev4422</a>
       </footer>
 
